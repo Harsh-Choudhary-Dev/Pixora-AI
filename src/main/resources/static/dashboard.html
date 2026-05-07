@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Pixora</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <i class="fas fa-camera-retro"></i>
+                <span>Pixora</span>
+            </div>
+            <div class="nav-menu">
+                <a href="dashboard.html" class="nav-link active">Dashboard</a>
+                <a href="#" class="nav-link">Gallery</a>
+                <a href="#" class="nav-link"> Albums</a>
+                <a href="#" class="nav-link">Settings</a>
+                <a href="#" class="nav-link" onclick="logout()">Logout</a>
+            </div>
+            <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
+                <i class="fas fa-moon" id="theme-icon"></i>
+            </button>
+            <button class="mobile-menu-toggle" onclick="toggleMobileMenu()">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Dashboard Content -->
+    <main class="dashboard">
+        <div class="container">
+            <!-- Header Section -->
+            <header class="dashboard-header">
+                <div class="header-content">
+                    <h1 class="page-title">Pixora</h1>
+                    <p class="page-subtitle">Your AI-powered photo gallery</p>
+                </div>
+                <div class="header-actions">
+                    <div class="search-bar">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="searchInput" placeholder="Search photos by tags or person name..." onkeyup="filterPhotos()">
+                        <button class="search-btn" id="searchButton" onclick="executeSearch()">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                    <button class="btn btn-primary" onclick="refreshPhotos()">
+                        <i class="fas fa-sync-alt"></i>
+                        Refresh
+                    </button>
+                </div>
+            </header>
+
+            <!-- Tab Navigation -->
+            <section class="tab-navigation">
+                <div class="tab-buttons">
+                    <button class="tab-btn active" data-tab="photos" onclick="switchTab('photos')">
+                        <i class="fas fa-images"></i>
+                        <span>Photos</span>
+                    </button>
+                    <button class="tab-btn" data-tab="people" onclick="switchTab('people')">
+                        <i class="fas fa-users"></i>
+                        <span>People</span>
+                    </button>
+                </div>
+            </section>
+
+            <!-- Loading State -->
+            <div id="loadingState" class="loading-state">
+                <div class="loading-spinner"></div>
+                <p>Loading your photos...</p>
+            </div>
+
+            <!-- Error State -->
+            <div id="errorState" class="error-state" style="display: none;">
+                <div class="error-icon">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <h3>Oops! Something went wrong</h3>
+                <p id="errorMessage">Failed to load photos. Please try again.</p>
+                <button class="btn btn-primary" onclick="refreshPhotos()">Retry</button>
+            </div>
+
+            <!-- Photos Tab Content -->
+            <section id="photosTab" class="tab-content active">
+                <div class="tab-header">
+                    <h2 class="tab-title">Photo Gallery</h2>
+                    <div class="view-options">
+                        <button class="view-btn active" onclick="setViewMode('grid')" data-view="grid">
+                            <i class="fas fa-th"></i>
+                        </button>
+                        <button class="view-btn" onclick="setViewMode('list')" data-view="list">
+                            <i class="fas fa-list"></i>
+                        </button>
+                    </div>
+                </div>
+                <div id="photosGrid" class="photos-grid">
+                    <!-- Photos will be dynamically loaded here -->
+                </div>
+            </section>
+
+            <!-- People Tab Content -->
+            <section id="peopleTab" class="tab-content" style="display: none;">
+                <div class="tab-header">
+                    <h2 class="tab-title">People</h2>
+                    <div class="people-count" id="peopleCount">
+                        <span>0 people identified</span>
+                    </div>
+                </div>
+                <div id="peopleGrid" class="people-grid">
+                    <!-- People will be dynamically loaded here -->
+                </div>
+                <div id="noPeopleMessage" class="no-people" style="display: none;">
+                    <i class="fas fa-user-slash"></i>
+                    <h3>No People Identified</h3>
+                    <p>No faces have been identified in your photos yet. Try adding more photos or enabling face detection.</p>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Photo Modal -->
+    <div id="photoModal" class="photo-modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closePhotoModal()">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="modal-body">
+                <div class="photo-preview">
+                    <img id="modalImage" src="" alt="Photo preview">
+                </div>
+                <div class="photo-details">
+                    <h3>Photo Details</h3>
+                    <div class="info-item">
+                        <strong>ID</strong>
+                        <span id="modalId"></span>
+                    </div>
+                    <div class="info-item">
+                        <strong>Path</strong>
+                        <span id="modalPath"></span>
+                    </div>
+                    <div class="info-item">
+                        <strong>Person</strong>
+                        <span id="modalPerson">Not identified</span>
+                    </div>
+                    <div class="info-item">
+                        <strong>Tags</strong>
+                        <div id="modalTags" class="tags-list"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/dashboard.js"></script>
+</body>
+</html>
